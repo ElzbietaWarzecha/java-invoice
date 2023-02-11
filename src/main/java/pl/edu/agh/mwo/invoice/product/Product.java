@@ -1,10 +1,6 @@
 package pl.edu.agh.mwo.invoice.product;
 
-import org.hamcrest.Matchers;
-
 import java.math.BigDecimal;
-
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public abstract class Product {
     private final String name;
@@ -14,6 +10,9 @@ public abstract class Product {
     private final BigDecimal taxPercent;
 
     protected Product(String name, BigDecimal price, BigDecimal tax) {
+        if (name == null || name.isEmpty() || price == null || price.compareTo(BigDecimal.ZERO) == -1) {
+            throw new IllegalArgumentException("Value cannot be empty, null or negative"); //komentarz jest tutaj opcjonalny
+        }
         this.name = name;
         this.price = price;
         this.taxPercent = tax;

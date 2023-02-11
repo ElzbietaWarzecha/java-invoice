@@ -17,14 +17,20 @@ public class Invoice {
     }
 
     public BigDecimal getSubtotal() {
-        return null;
+        BigDecimal sum = new BigDecimal(0);
+        if (this.products != null) {
+            for (Product product : products) {
+                sum.add(product.getPriceWithTax());
+            }
+        }
+        return sum;
     }
 
     public BigDecimal getTax() {
-        return null;
+        return new BigDecimal(0);
     }
 
     public BigDecimal getTotal() {
-        return null;
+        return new BigDecimal(0);
     }
 }
