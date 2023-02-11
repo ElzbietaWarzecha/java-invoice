@@ -1,6 +1,10 @@
 package pl.edu.agh.mwo.invoice.product;
 
+import org.hamcrest.Matchers;
+
 import java.math.BigDecimal;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public abstract class Product {
     private final String name;
@@ -16,18 +20,18 @@ public abstract class Product {
     }
 
     public String getName() {
-        return null;
+        return this.name;
     }
 
     public BigDecimal getPrice() {
-        return null;
+        return this.price;
     }
 
     public BigDecimal getTaxPercent() {
-        return null;
+        return this.taxPercent;
     }
 
     public BigDecimal getPriceWithTax() {
-        return null;
+        return getPrice().add(getPrice().multiply(getTaxPercent()));
     }
 }
