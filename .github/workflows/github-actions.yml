@@ -13,11 +13,10 @@ jobs:
           distribution: 'adopt'
       - name: Checkstyle
         run: mvn checkstyle:check
-  example_matrix:
+  test:
     strategy:
       matrix:
         version: [ 8, 13, 15 ]
-  test:
     name: Unit tests
     runs-on: ubuntu-latest
     steps:
