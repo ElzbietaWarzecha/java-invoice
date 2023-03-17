@@ -125,4 +125,14 @@ public class InvoiceTest {
     public void testAddingNullProduct() {
         invoice.addProduct(null);
     }
+
+    @Test
+    public void testInvoiceNumberNotNull() {
+        Assert.assertThat(invoice.getNumber(), Matchers.notNullValue());
+    }
+
+    @Test
+    public void testInvoiceNumberNotEmpty() {
+        Assert.assertThat(invoice.getNumber(), Matchers.not(""));
+    }
 }

@@ -1,13 +1,27 @@
 package pl.edu.agh.mwo.invoice;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import pl.edu.agh.mwo.invoice.product.Product;
 
 public class Invoice {
+    private String number;
+
     private Map<Product, Integer> products = new HashMap<Product, Integer>();
+
+    public Invoice() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        this.number = localDateTime.toString();
+    }
+
+    public String getNumber() {
+        return number;
+    }
 
     public void addProduct(Product product) {
         addProduct(product, 1);
