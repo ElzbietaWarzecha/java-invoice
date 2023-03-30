@@ -185,5 +185,51 @@ public class InvoiceTest {
         Assert.assertThat(invoice.getInvoiceToPrint().get(4), Matchers.equalTo("Liczba pozycji: 3"));
     }
 
+    @Test
+    public void testInvoiceAddTwoTimesTheSameProductCheckQuantity() {
+        Product product = new TaxFreeProduct("Chleb", new BigDecimal("5"));
+        invoice.addProduct(product, 12);
+        invoice.addProduct(product, 3);
+        Assert.assertThat(invoice.getProducts().get(product), Matchers.equalTo(15));
+    }
+
+    @Test
+    public void testInvoiceAddTwoTimesTheSameProductCheckInvoiceToPrintSize() {
+        Product product = new TaxFreeProduct("Chleb", new BigDecimal("5"));
+        invoice.addProduct(product, 12);
+        invoice.addProduct(product, 3);
+        invoice.prepareInvoiceToPrint();
+        Assert.assertThat(invoice.getInvoiceToPrint().size(), Matchers.equalTo(3));
+    }
+
+    @Test
+    public void testInvoiceAddMultipleTimesTwoProductsCheckQuantity() {
+        Product product = new TaxFreeProduct("Owsianka", new BigDecimal("3"));
+        Product product1 = new DairyProduct("Serek wiejski", new BigDecimal("4.5"));
+
+        invoice.addProduct(product, 2);
+        invoice.addProduct(product1, 1);
+        invoice.addProduct(product, 1);
+        invoice.addProduct(product1, 3);
+        invoice.addProduct(product, 3);
+
+        Assert.assertThat(invoice.getProducts().get(product), Matchers.equalTo(6));
+        Assert.assertThat(invoice.getProducts().get(product1), Matchers.equalTo(4));
+    }
+
+    @Test
+    public void testInvoiceAddMultipleTimesTwoProductsCheckInvoiceToPrintSize() {
+        Product product = new TaxFreeProduct("Owsianka", new BigDecimal("3"));
+        Product product1 = new DairyProduct("Serek wiejski", new BigDecimal("4.5"));
+
+        invoice.addProduct(product, 2);
+        invoice.addProduct(product1, 1);
+        invoice.addProduct(product, 1);
+        invoice.addProduct(product1, 3);
+        invoice.addProduct(product, 3);
+
+        invoice.prepareInvoiceToPrint();
+        Assert.assertThat(invoice.getInvoiceToPrint().size(), Matchers.equalTo(4));
+    }
 
 }

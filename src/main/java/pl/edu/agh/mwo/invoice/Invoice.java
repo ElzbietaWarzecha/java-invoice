@@ -31,6 +31,10 @@ public class Invoice {
         return invoiceToPrint;
     }
 
+    public Map<Product, Integer> getProducts() {
+        return products;
+    }
+
     public void addProduct(Product product) {
         addProduct(product, 1);
     }
@@ -39,7 +43,17 @@ public class Invoice {
         if (product == null || quantity <= 0) {
             throw new IllegalArgumentException();
         }
-        products.put(product, quantity);
+        int counter = 0;
+        for (Product prod : products.keySet()) {
+            if (prod.getName().equals(product.getName())) {
+                counter++;
+            }
+        }
+        if (counter > 0)
+            products.put(product, products.get(product) + quantity);
+        else {
+            products.put(product, quantity);
+        }
     }
 
     public BigDecimal getNetTotal() {
