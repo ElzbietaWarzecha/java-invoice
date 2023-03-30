@@ -4,7 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import pl.edu.agh.mwo.invoice.product.Product;
 
@@ -64,7 +67,8 @@ public class Invoice {
 
     public void prepareInvoiceToPrint() {
         for (Product product : products.keySet()) {
-            this.invoiceToPrint.add("Nazwa: " + product.getName() + ", liczba sztuk: " + products.get(product) + ", cena: " + product.getPrice());
+            this.invoiceToPrint.add("Nazwa: " + product.getName() + ", liczba sztuk: "
+                    + products.get(product) + ", cena: " + product.getPrice());
         }
         this.invoiceToPrint.add("Liczba pozycji: " + this.invoiceToPrint.size());
     }
