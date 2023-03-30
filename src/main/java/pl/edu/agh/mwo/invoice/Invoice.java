@@ -19,7 +19,7 @@ public class Invoice {
 
     public Invoice() {
         LocalDateTime localDateTime = LocalDateTime.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd/HH:mm:ss");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd/HH:mm:ss:SSS");
         this.number = localDateTime.format(format);
     }
 

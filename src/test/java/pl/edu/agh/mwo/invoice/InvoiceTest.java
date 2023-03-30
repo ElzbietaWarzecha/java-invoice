@@ -11,6 +11,8 @@ import pl.edu.agh.mwo.invoice.product.TaxFreeProduct;
 
 import java.math.BigDecimal;
 
+import static java.lang.Thread.sleep;
+
 public class InvoiceTest {
     private Invoice invoice;
 
@@ -132,6 +134,27 @@ public class InvoiceTest {
     @Test
     public void testInvoiceNumberNotEmpty() {
         Assert.assertThat(invoice.getNumber(), Matchers.not(""));
+    }
+
+    @Test
+    public void testTwoInvoicesHaveDifferentNumbers() throws InterruptedException {
+        String invoiceNumber1 = new Invoice().getNumber();
+        sleep(1);
+        String invoiceNumber2 = new Invoice().getNumber();
+        Assert.assertNotEquals(invoiceNumber1, invoiceNumber2);
+    }
+
+    @Test
+    public void testInvoiceDoesNotChangeItsNumber() {
+        Assert.assertEquals(invoice.getNumber(), invoice.getNumber());
+    }
+
+    @Test
+    public void testTheFirstInvoiceNumberIsLowerThanTheSecond() throws InterruptedException {
+        String invoiceNumber1 = new Invoice().getNumber();
+        sleep(1);
+        String invoiceNumber2 = new Invoice().getNumber();
+        Assert.assertThat(invoiceNumber1, Matchers.lessThan(invoiceNumber2));
     }
 
     @Test
