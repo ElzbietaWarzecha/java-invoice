@@ -3,9 +3,8 @@ package pl.edu.agh.mwo.invoice;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import pl.edu.agh.mwo.invoice.product.Product;
 
@@ -14,13 +13,20 @@ public class Invoice {
 
     private Map<Product, Integer> products = new HashMap<Product, Integer>();
 
+    private List<String> invoiceToPrint = new ArrayList<>();
+
     public Invoice() {
         LocalDateTime localDateTime = LocalDateTime.now();
-        this.number = localDateTime.toString();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd/HH:mm:ss");
+        this.number = localDateTime.format(format);
     }
 
     public String getNumber() {
         return number;
+    }
+
+    public List<String> getInvoiceToPrint() {
+        return invoiceToPrint;
     }
 
     public void addProduct(Product product) {
@@ -54,5 +60,12 @@ public class Invoice {
             totalGross = totalGross.add(product.getPriceWithTax().multiply(quantity));
         }
         return totalGross;
+    }
+
+    public void prepareInvoiceToPrint() {
+        for (Product product : products.keySet()) {
+            this.invoiceToPrint.add("Nazwa: " + product.getName() + ", liczba sztuk: " + products.get(product) + ", cena: " + product.getPrice());
+        }
+        this.invoiceToPrint.add("Liczba pozycji: " + this.invoiceToPrint.size());
     }
 }
