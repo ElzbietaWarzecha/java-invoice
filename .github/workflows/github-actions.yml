@@ -16,7 +16,7 @@ jobs:
   test:
     strategy:
       matrix:
-        version: [ 8, 13, 15 ]
+        version: [ 17, 19 ]
     name: Unit tests
     runs-on: ubuntu-latest
     steps:
