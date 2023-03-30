@@ -1,18 +1,15 @@
 package pl.edu.agh.mwo.invoice;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import pl.edu.agh.mwo.invoice.Invoice;
 import pl.edu.agh.mwo.invoice.product.DairyProduct;
 import pl.edu.agh.mwo.invoice.product.OtherProduct;
 import pl.edu.agh.mwo.invoice.product.Product;
 import pl.edu.agh.mwo.invoice.product.TaxFreeProduct;
+
+import java.math.BigDecimal;
 
 public class InvoiceTest {
     private Invoice invoice;
@@ -140,49 +137,53 @@ public class InvoiceTest {
     @Test
     public void testInvoiceProductsListEmptyCheckSize() {
         invoice.prepareInvoiceToPrint();
-        Assert.assertThat(invoice.getInvoiceToPrint().size(), Matchers.equalTo(1));
+        Assert.assertThat(invoice.getInvoiceToPrint().size(), Matchers.equalTo(2));
     }
 
     @Test
     public void testInoviceProductsListEmptyCheckValues() {
         invoice.prepareInvoiceToPrint();
-        Assert.assertThat(invoice.getInvoiceToPrint(), Matchers.equalTo(Arrays.asList("Liczba pozycji: 0")));
+        Assert.assertThat(invoice.getInvoiceToPrint().get(1), Matchers.equalTo("Liczba pozycji: 0"));
     }
 
     @Test
     public void testInvoiceProductsListNonEmptyCheckSize() {
-        // 2x chleb - price with tax: 10
         invoice.addProduct(new TaxFreeProduct("Chleb", new BigDecimal("5")), 2);
-//        // 3x chedar - price with tax: 32.40
         invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
-//        // 1000x pinezka - price with tax: 12.30
         invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
         invoice.prepareInvoiceToPrint();
-        Assert.assertThat(invoice.getInvoiceToPrint().size(), Matchers.equalTo(4));
-    }
-
-    @Test
-    public void testInvoiceProductsListNonEmptyCheckLastElement() {
-        // 2x chleb - price with tax: 10
-        invoice.addProduct(new TaxFreeProduct("Chleb", new BigDecimal("5")), 2);
-//        // 3x chedar - price with tax: 32.40
-        invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
-//        // 1000x pinezka - price with tax: 12.30
-        invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
-        invoice.prepareInvoiceToPrint();
-        Assert.assertThat(invoice.getInvoiceToPrint().get(3), Matchers.equalTo("Liczba pozycji: 3"));
+        Assert.assertThat(invoice.getInvoiceToPrint().size(), Matchers.equalTo(5));
     }
 
     @Test
     public void testInvoiceProductsListNonEmptyCheckFirstElement() {
-        Product product = new TaxFreeProduct("Chleb", new BigDecimal("5"));
-        // 2x chleb - price with tax: 10
-        invoice.addProduct(product, 2);
-//        // 3x chedar - price with tax: 32.40
+        invoice.addProduct(new TaxFreeProduct("Chleb", new BigDecimal("5")), 2);
         invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
-//        // 1000x pinezka - price with tax: 12.30
         invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
         invoice.prepareInvoiceToPrint();
-        Assert.assertThat(invoice.getInvoiceToPrint().get(0), Matchers.equalTo("Nazwa: Chleb, liczba sztuk: 2, cena: 5"));
+        Assert.assertThat(invoice.getInvoiceToPrint().get(0), Matchers.containsString("Numer faktury: 2023"));
     }
+
+    @Test
+    public void testInvoiceProductsListNonEmptyCheckProducts() {
+        Product product = new TaxFreeProduct("Chleb", new BigDecimal("5"));
+        invoice.addProduct(product, 2);
+        invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
+        invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
+        invoice.prepareInvoiceToPrint();
+        Assert.assertThat(invoice.getInvoiceToPrint().get(1), Matchers.equalTo("Nazwa: Chleb, liczba sztuk: 2, cena: 5"));
+        Assert.assertThat(invoice.getInvoiceToPrint().get(2), Matchers.equalTo("Nazwa: Chedar, liczba sztuk: 3, cena: 10"));
+        Assert.assertThat(invoice.getInvoiceToPrint().get(3), Matchers.equalTo("Nazwa: Pinezka, liczba sztuk: 1000, cena: 0.01"));
+    }
+
+    @Test
+    public void testInvoiceProductsListNonEmptyCheckLastElement() {
+        invoice.addProduct(new TaxFreeProduct("Chleb", new BigDecimal("5")), 2);
+        invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
+        invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
+        invoice.prepareInvoiceToPrint();
+        Assert.assertThat(invoice.getInvoiceToPrint().get(4), Matchers.equalTo("Liczba pozycji: 3"));
+    }
+
+
 }

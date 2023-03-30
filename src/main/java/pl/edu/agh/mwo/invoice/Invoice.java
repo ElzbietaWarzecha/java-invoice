@@ -1,20 +1,19 @@
 package pl.edu.agh.mwo.invoice;
 
+import pl.edu.agh.mwo.invoice.product.Product;
+
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import pl.edu.agh.mwo.invoice.product.Product;
 
 public class Invoice {
     private String number;
 
-    private Map<Product, Integer> products = new HashMap<Product, Integer>();
+    private Map<Product, Integer> products = new LinkedHashMap<Product, Integer>();
 
     private List<String> invoiceToPrint = new ArrayList<>();
 
@@ -66,10 +65,13 @@ public class Invoice {
     }
 
     public void prepareInvoiceToPrint() {
+        this.invoiceToPrint.add("Numer faktury: " + this.number);
+        int counter = 0;
         for (Product product : products.keySet()) {
             this.invoiceToPrint.add("Nazwa: " + product.getName() + ", liczba sztuk: "
                     + products.get(product) + ", cena: " + product.getPrice());
+            counter++;
         }
-        this.invoiceToPrint.add("Liczba pozycji: " + this.invoiceToPrint.size());
+        this.invoiceToPrint.add("Liczba pozycji: " + counter);
     }
 }
