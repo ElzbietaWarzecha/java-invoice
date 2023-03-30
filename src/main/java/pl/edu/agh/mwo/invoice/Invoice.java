@@ -51,8 +51,7 @@ public class Invoice {
         }
         if (counter > 0) {
             products.put(product, products.get(product) + quantity);
-        }
-        else {
+        } else {
             products.put(product, quantity);
         }
     }
