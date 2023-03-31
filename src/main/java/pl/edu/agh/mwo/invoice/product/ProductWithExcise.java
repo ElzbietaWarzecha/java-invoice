@@ -16,6 +16,8 @@ public abstract class ProductWithExcise extends Product {
 
     @Override
     public BigDecimal getPriceWithTax() {
-        return this.getPrice().multiply(this.getTaxPercent()).add(this.getPrice()).add(this.getExcise());
+        return this.getPrice().multiply(this.getTaxPercent())
+                .add(this.getPrice())
+                .add(this.getExcise());
     }
 }

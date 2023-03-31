@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import java.time.Month;
 
 public class FuelCanister extends ProductWithExcise {
-    private final static int motherInLawDayOfMonth = 5;
-    private final static Month motherInLawMonth = Month.MARCH;
+    private static final int motherInLawDayOfMonth = 5;
+    private static final Month motherInLawMonth = Month.MARCH;
 
     public FuelCanister(String name, BigDecimal price) {
         super(name, price, (LocalDate.now().getMonth() == motherInLawMonth
