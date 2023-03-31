@@ -4,10 +4,7 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import pl.edu.agh.mwo.invoice.product.DairyProduct;
-import pl.edu.agh.mwo.invoice.product.OtherProduct;
-import pl.edu.agh.mwo.invoice.product.Product;
-import pl.edu.agh.mwo.invoice.product.TaxFreeProduct;
+import pl.edu.agh.mwo.invoice.product.*;
 
 import java.math.BigDecimal;
 
@@ -109,6 +106,27 @@ public class InvoiceTest {
         // 1000x pinezka - price with tax: 12.30
         invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
         Assert.assertThat(new BigDecimal("54.70"), Matchers.comparesEqualTo(invoice.getGrossTotal()));
+    }
+
+    @Test
+    public void testInvoiceHasProperTaxOneProductWithExcise() {
+        invoice.addProduct(new BottleOfWine("Czerwone słodkie", new BigDecimal("45")), 3);
+        Assert.assertThat(new BigDecimal("182.73"), Matchers.comparesEqualTo(invoice.getGrossTotal()));
+    }
+
+    @Test
+    public void testInvoiceHasProperTaxTwoProductsWithExcise() {
+        invoice.addProduct(new BottleOfWine("Czerwone słodkie", new BigDecimal("45")), 3);
+        invoice.addProduct(new FuelCanister("LPG 95", new BigDecimal("6.65")), 10);
+        Assert.assertThat(new BigDecimal("320.125"), Matchers.comparesEqualTo(invoice.getGrossTotal()));
+    }
+
+    @Test
+    public void testInvoiceHasProperTaxProductsWithAndWithoutExcise() {
+        invoice.addProduct(new BottleOfWine("Czerwone słodkie", new BigDecimal("45")), 3);
+        invoice.addProduct(new FuelCanister("LPG 95", new BigDecimal("6.65")), 10);
+        invoice.addProduct(new TaxFreeProduct("Kubek", new BigDecimal("5")), 2);
+        Assert.assertThat(new BigDecimal("330.125"), Matchers.comparesEqualTo(invoice.getGrossTotal()));
     }
 
     @Test(expected = IllegalArgumentException.class)
