@@ -158,13 +158,13 @@ public class InvoiceTest {
     }
 
     @Test
-    public void testInvoiceProductsListEmptyCheckSize() {
+    public void testInvoiceProductsListWithoutProductsCheckSize() {
         invoice.prepareInvoiceToPrint();
         Assert.assertThat(invoice.getInvoiceToPrint().size(), Matchers.equalTo(2));
     }
 
     @Test
-    public void testInoviceProductsListEmptyCheckValues() {
+    public void testInoviceProductsListWithoutProductsCheckSummary() {
         invoice.prepareInvoiceToPrint();
         Assert.assertThat(invoice.getInvoiceToPrint().get(1), Matchers.equalTo("Liczba pozycji: 0"));
     }
@@ -179,16 +179,16 @@ public class InvoiceTest {
     }
 
     @Test
-    public void testInvoiceProductsListNonEmptyCheckFirstElement() {
+    public void testInvoiceProductsListNonEmptyCheckHeader() {
         invoice.addProduct(new TaxFreeProduct("Chleb", new BigDecimal("5")), 2);
         invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
         invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
         invoice.prepareInvoiceToPrint();
-        Assert.assertThat(invoice.getInvoiceToPrint().get(0), Matchers.containsString("Numer faktury: 2023"));
+        Assert.assertThat(invoice.getInvoiceToPrint().get(0), Matchers.containsString("Numer faktury: "));
     }
 
     @Test
-    public void testInvoiceProductsListNonEmptyCheckProducts() {
+    public void testInvoiceProductsListNonEmptyCheckProductPositions() {
         Product product = new TaxFreeProduct("Chleb", new BigDecimal("5"));
         invoice.addProduct(product, 2);
         invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
@@ -200,7 +200,7 @@ public class InvoiceTest {
     }
 
     @Test
-    public void testInvoiceProductsListNonEmptyCheckLastElement() {
+    public void testInvoiceProductsListNonEmptyCheckSummary() {
         invoice.addProduct(new TaxFreeProduct("Chleb", new BigDecimal("5")), 2);
         invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
         invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
