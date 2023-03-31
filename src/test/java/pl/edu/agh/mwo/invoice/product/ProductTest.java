@@ -1,6 +1,8 @@
 package pl.edu.agh.mwo.invoice.product;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -54,4 +56,17 @@ public class ProductTest {
     public void testProductWithNegativePrice() {
         new TaxFreeProduct("Mandarynki", new BigDecimal("-1.00"));
     }
+
+    @Test()
+    public void testProductWineWithTaxAndExcise() {
+        BottleOfWine product = new BottleOfWine("Białe wytrawne", new BigDecimal("30.00"));
+        Assert.assertThat(new BigDecimal("42.46"), Matchers.comparesEqualTo(product.getPriceWithTax()));
+    }
+
+    @Test()
+    public void testProductFuelWithTaxAndExcise() {
+        FuelCanister product = new FuelCanister("LPG 95", new BigDecimal("6.65"));
+        Assert.assertThat(new BigDecimal("13.7395"), Matchers.comparesEqualTo(product.getPriceWithTax()));
+    }
+
 }
