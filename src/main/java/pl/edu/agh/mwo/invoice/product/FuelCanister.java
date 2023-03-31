@@ -10,7 +10,8 @@ public class FuelCanister extends ProductWithExcise {
 
     public FuelCanister(String name, BigDecimal price) {
         super(name, price,
-                (LocalDate.now().getMonth() == motherInLawMonth && LocalDate.now().getDayOfMonth() == motherInLawDayOfMonth)
+                (LocalDate.now().getMonth() == motherInLawMonth
+                        && LocalDate.now().getDayOfMonth() == motherInLawDayOfMonth)
                 ? BigDecimal.ZERO : new BigDecimal("0.23"), new BigDecimal("5.56"));
     }
 }
