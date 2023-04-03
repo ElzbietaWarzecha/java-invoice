@@ -20,7 +20,6 @@ public class FuelCanister extends ProductWithExcise {
     public BigDecimal getPriceWithTax() {
         if (isMotherInLawDayToday) {
             return this.getPrice()
-                    .add(this.getPrice())
                     .add(this.getExcise());
         } else {
             return this.getPrice().multiply(this.getTaxPercent())
