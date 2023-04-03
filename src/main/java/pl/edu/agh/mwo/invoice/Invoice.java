@@ -3,27 +3,20 @@ package pl.edu.agh.mwo.invoice;
 import pl.edu.agh.mwo.invoice.product.Product;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Invoice {
-    private String number;
-
     private Map<Product, Integer> products = new LinkedHashMap<Product, Integer>();
+
+    private static int nextNumber = 0;
+    private final int number = ++nextNumber;
 
     private List<String> invoiceToPrint = new ArrayList<>();
 
-    public Invoice() {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd/HH:mm:ss:SSS");
-        this.number = localDateTime.format(format);
-    }
-
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
 
@@ -82,10 +75,25 @@ public class Invoice {
         this.invoiceToPrint.add("Numer faktury: " + this.number);
         int counter = 0;
         for (Product product : products.keySet()) {
-            this.invoiceToPrint.add("Nazwa: " + product.getName() + ", liczba sztuk: "
-                    + products.get(product) + ", cena: " + product.getPrice());
+            int quantity = products.get(product);
+            BigDecimal q = new BigDecimal(quantity);
+            this.invoiceToPrint.add("Nazwa: " + product.getName()
+                    + ", liczba sztuk: " + quantity
+                    + ", cena netto: " + product.getPrice().multiply(q)
+                    + ", cena brutto: " + product.getPriceWithTax().multiply(q));
             counter++;
         }
         this.invoiceToPrint.add("Liczba pozycji: " + counter);
     }
+
+    @Override
+    public String toString() {
+        String printMe = "";
+        for (String s : this.invoiceToPrint
+        ) {
+            printMe = printMe + s + "\n";
+        }
+        return printMe;
+    }
+
 }

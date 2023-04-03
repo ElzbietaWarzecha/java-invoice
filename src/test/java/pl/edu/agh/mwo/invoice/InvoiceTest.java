@@ -155,11 +155,16 @@ public class InvoiceTest {
     }
 
     @Test
-    public void testTwoInvoicesHaveDifferentNumbers() throws InterruptedException {
-        String invoiceNumber1 = new Invoice().getNumber();
-        sleep(1);
-        String invoiceNumber2 = new Invoice().getNumber();
-        Assert.assertNotEquals(invoiceNumber1, invoiceNumber2);
+    public void testInvoiceHasNumberGreaterThan0() {
+        int number = invoice.getNumber();
+        Assert.assertThat(number, Matchers.greaterThan(0));
+    }
+
+    @Test
+    public void testTwoInvoicesHaveDifferentNumbers() {
+        int number1 = new Invoice().getNumber();
+        int number2 = new Invoice().getNumber();
+        Assert.assertNotEquals(number1, number2);
     }
 
     @Test
@@ -168,11 +173,10 @@ public class InvoiceTest {
     }
 
     @Test
-    public void testTheFirstInvoiceNumberIsLowerThanTheSecond() throws InterruptedException {
-        String invoiceNumber1 = new Invoice().getNumber();
-        sleep(1);
-        String invoiceNumber2 = new Invoice().getNumber();
-        Assert.assertThat(invoiceNumber1, Matchers.lessThan(invoiceNumber2));
+    public void testTheFirstInvoiceNumberIsLowerThanTheSecond() {
+        int number1 = new Invoice().getNumber();
+        int number2 = new Invoice().getNumber();
+        Assert.assertThat(number1, Matchers.lessThan(number2));
     }
 
     @Test
@@ -202,7 +206,7 @@ public class InvoiceTest {
         invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
         invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
         invoice.prepareInvoiceToPrint();
-        Assert.assertThat(invoice.getInvoiceToPrint().get(0), Matchers.containsString("Numer faktury: "));
+        Assert.assertThat(invoice.getInvoiceToPrint().get(0), Matchers.containsString("Numer faktury: " + invoice.getNumber()));
     }
 
     @Test
@@ -210,11 +214,12 @@ public class InvoiceTest {
         Product product = new TaxFreeProduct("Chleb", new BigDecimal("5"));
         invoice.addProduct(product, 2);
         invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
-        invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
+        invoice.addProduct(new OtherProduct("Ołówek", new BigDecimal("1")), 11);
         invoice.prepareInvoiceToPrint();
-        Assert.assertThat(invoice.getInvoiceToPrint().get(1), Matchers.equalTo("Nazwa: Chleb, liczba sztuk: 2, cena: 5"));
-        Assert.assertThat(invoice.getInvoiceToPrint().get(2), Matchers.equalTo("Nazwa: Chedar, liczba sztuk: 3, cena: 10"));
-        Assert.assertThat(invoice.getInvoiceToPrint().get(3), Matchers.equalTo("Nazwa: Pinezka, liczba sztuk: 1000, cena: 0.01"));
+        Assert.assertThat(invoice.getInvoiceToPrint().get(1),
+                Matchers.equalTo("Nazwa: Chleb, liczba sztuk: 2, cena netto: 10, cena brutto: 10"));
+        Assert.assertThat(invoice.getInvoiceToPrint().get(2), Matchers.equalTo("Nazwa: Chedar, liczba sztuk: 3, cena netto: 30, cena brutto: 32.40"));
+        Assert.assertThat(invoice.getInvoiceToPrint().get(3), Matchers.equalTo("Nazwa: Ołówek, liczba sztuk: 11, cena netto: 11, cena brutto: 13.53"));
     }
 
     @Test
@@ -272,5 +277,22 @@ public class InvoiceTest {
         invoice.prepareInvoiceToPrint();
         Assert.assertThat(invoice.getInvoiceToPrint().size(), Matchers.equalTo(4));
     }
+
+    @Test
+    public void testPrintingWholeInvoiceWithDifferentProductsAdded() {
+        Product product = new TaxFreeProduct("Chleb", new BigDecimal("5"));
+        invoice.addProduct(product, 2);
+        invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
+        invoice.addProduct(new OtherProduct("Ołówek", new BigDecimal("1")), 11);
+        invoice.prepareInvoiceToPrint();
+        Assert.assertThat(invoice.toString(), Matchers.equalTo(
+                "Numer faktury: " + invoice.getNumber() + "\n" +
+                        "Nazwa: Chleb, liczba sztuk: 2, cena netto: 10, cena brutto: 10\n" +
+                        "Nazwa: Chedar, liczba sztuk: 3, cena netto: 30, cena brutto: 32.40\n" +
+                        "Nazwa: Ołówek, liczba sztuk: 11, cena netto: 11, cena brutto: 13.53\n" +
+                        "Liczba pozycji: 3\n"));
+
+    }
+
 
 }
