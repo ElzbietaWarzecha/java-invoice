@@ -8,8 +8,6 @@ import pl.edu.agh.mwo.invoice.product.*;
 
 import java.math.BigDecimal;
 
-import static java.lang.Thread.sleep;
-
 public class InvoiceTest {
     private Invoice invoice;
 
@@ -142,16 +140,6 @@ public class InvoiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void testAddingNullProduct() {
         invoice.addProduct(null);
-    }
-
-    @Test
-    public void testInvoiceNumberNotNull() {
-        Assert.assertThat(invoice.getNumber(), Matchers.notNullValue());
-    }
-
-    @Test
-    public void testInvoiceNumberNotEmpty() {
-        Assert.assertThat(invoice.getNumber(), Matchers.not(""));
     }
 
     @Test

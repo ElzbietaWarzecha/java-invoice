@@ -8,17 +8,13 @@ public class FuelCanister extends ProductWithExcise {
     private static final int motherInLawDayOfMonth = 5;
     private static final Month motherInLawMonth = Month.MARCH;
 
-    private static final boolean isMotherInLawDayToday =
-            LocalDate.now().getMonth() == motherInLawMonth
-                    && LocalDate.now().getDayOfMonth() == motherInLawDayOfMonth;
-
     public FuelCanister(String name, BigDecimal price) {
         super(name, price, new BigDecimal("0.23"), new BigDecimal("5.56"));
     }
 
     @Override
     public BigDecimal getPriceWithTax() {
-        if (isMotherInLawDayToday) {
+        if (isMotherInLawDayToday()) {
             return this.getPrice()
                     .add(this.getExcise());
         } else {
@@ -26,5 +22,10 @@ public class FuelCanister extends ProductWithExcise {
                     .add(this.getPrice())
                     .add(this.getExcise());
         }
+    }
+
+    private static boolean isMotherInLawDayToday() {
+        return LocalDate.now().getMonth() == motherInLawMonth
+                && LocalDate.now().getDayOfMonth() == motherInLawDayOfMonth;
     }
 }
